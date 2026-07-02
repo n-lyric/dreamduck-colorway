@@ -1,5 +1,15 @@
 # WORK_LOG — ドリームダック カラバリ仕様書
 
+## 2026-07-02 — 3Dデータ連携 ＋ GitHub Pages 公開
+- **OBJ→STL変換**：Nomad Sculpt書出しの頂点カラーOBJ5点 → バイナリSTL（依存なし自作コンバータ・クアッド三角形化・法線自動計算）。STLは色非対応のためジオメトリのみ。
+- **仕様書サイトに「3Dフォルムデータ」セクション追加**：5フォルムをカード表示（口ばし/羽/首バッジ）＋各OBJ/STL DLリンク＋Three.jsによるその場3Dプレビュー（STL読込・オービット操作）。
+- **`プレビュー起動.command` 同梱**：file://直開きだと3Dが読めないため、localhost:8765を立てる起動スクリプト。
+- **GitHub公開**：Lyric専用組織 `n-lyric` を新設 → リポ `n-lyric/dreamduck-colorway`（Public）作成・push・Pages有効化。
+  - 公開URL：**https://n-lyric.github.io/dreamduck-colorway/**
+  - 保護：noindex のみ（PWゲート無し）。未発表商品情報のため取扱注意。
+  - リポ除外：`*.xlsx`（元データ58MB）・`images/_old_v1_20260526/`・`.DS_Store`・`.claude/`。
+  - 注意：中断時の誤操作で個人側に空リポ `toshiokikuchi777-sudo/dreamduck-colorway` が残存。要削除（delete_repoスコープ or Web）。
+
 ## 2026-06-25 — 初回ラインナップ確定版へ更新
 - ソース：`ドリームダック初回ラインナップ.xlsx`（リリック支給／6/25受領）を正とし、`index.html` を全面更新。
 - 旧版（2026.05.26受領）からの変更点：
