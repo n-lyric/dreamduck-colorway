@@ -1133,8 +1133,8 @@ const COLORS = [
 ];
 const colorImg = (no) => `images/duck_${String(no).padStart(2, '0')}.png`;
 // 手動オーバーライド（カラー番号 → フォルムkey）。指定色は自動判定より優先。
-// 13→EYE(閉じ・前・普通EYE) / 09→開き横wink / 10→開き横wink
-const COLOR_FORM_OVERRIDE = { 9: 'OSNw', 10: 'OSNw', 13: 'CFNe' };
+// 13→EYE(閉じ・前・普通EYE) / 09→Form02(閉じ・横・普通wink) / 10→開き横wink
+const COLOR_FORM_OVERRIDE = { 9: 'CSNw', 10: 'OSNw', 13: 'CFNe' };
 // 各フォルムに割り当てる色：オーバーライド優先、無ければ基本フォルムのみ口ばし/羽/首の一致で紐付け
 const colorsForForm = (f) => COLORS.filter(c => {
   if (c.no in COLOR_FORM_OVERRIDE) return COLOR_FORM_OVERRIDE[c.no] === f.key;
