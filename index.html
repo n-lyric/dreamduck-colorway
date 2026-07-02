@@ -498,6 +498,61 @@
     font-size: 11px;
     color: var(--ink-soft);
   }
+  .form-viewer {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 6px;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 38%, #33302a 0%, #1c1a17 72%);
+    cursor: grab;
+    touch-action: pan-y;
+  }
+  .form-viewer:active { cursor: grabbing; }
+  .form-viewer canvas { display: block; width: 100%; height: 100%; }
+  .fv-status {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 14px;
+    color: #cbb892;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    line-height: 1.7;
+  }
+  .fv-hint {
+    position: absolute;
+    left: 10px; bottom: 8px;
+    color: rgba(245,237,226,.65);
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+  .form-viewer.ready .fv-hint { opacity: 1; }
+  .fv-enlarge {
+    position: absolute;
+    right: 8px; top: 8px;
+    background: rgba(0,0,0,.35);
+    color: #f5ede2;
+    border: none;
+    border-radius: 4px;
+    width: 30px; height: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .form-viewer.ready .fv-enlarge { display: flex; }
+  .fv-enlarge:hover { background: rgba(0,0,0,.6); }
   .form-part.special {
     background: #fde8e8;
     border-color: #f3c9c9;
@@ -916,9 +971,9 @@
   <div class="section-title" id="forms3d" style="margin-top:80px;"><span>3D フォルムデータ</span></div>
 
   <p class="forms3d-intro">
-    せきや氏作成の3D原型（Nomad Sculpt）から書き出したフォルム別データ。<br>
-    各フォルムを <b>その場で回して確認</b>でき、<b>OBJ（頂点カラー付き）／ STL（造形・3Dプリント用）</b> をダウンロードできます。<br>
-    <span style="font-size:12px;">※ 現状は基本形まわりの5フォルム。首傾き系・開き×前などの組み合わせは追加予定。</span><br>
+    せきや氏作成の3D原型（Nomad Sculpt）から書き出したフォルム別データ 全8点。<br>
+    各カードの3Dは <b>自動で回転</b>、<b>ドラッグでその場で確認</b>でき、<b>OBJ（頂点カラー付き）／ STL（造形・3Dプリント用）</b> をダウンロードできます。<br>
+    <span style="font-size:12px;">※ 口ばし（開き/閉じ）× 羽（前/横）× 首（普通/傾き）＋ wink・EYE の派生を含む。首傾き系（顔斜め）・開き×前も収録済み。</span><br>
     <span style="font-size:12px;">※ 外寸は各STLの実測バウンディングボックス（W幅×D奥行×H高さ／mm換算）。量産スケールは別途調整。</span>
   </p>
 
@@ -974,11 +1029,14 @@ import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 
 // ---- フォルム定義（basename＝拡張子なしのファイル名） ----
 const FORMS = [
-  { base: '口閉じ、羽前、顔通常',       beak: '閉じ', wing: '前', neck: '普通', extra: '',     tag: 'Form 01', dims: 'W44.0 × D63.0 × H60.1' },
-  { base: '口閉じ、羽前、顔通常、EYE',  beak: '閉じ', wing: '前', neck: '普通', extra: 'EYE',  tag: 'Form 02', dims: 'W50.6 × D63.0 × H60.1' },
-  { base: '口閉じ、羽横、顔普通、wink', beak: '閉じ', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 03 ／ 基本形', dims: 'W50.6 × D63.0 × H60.1' },
-  { base: '口開き、羽横、顔普通',       beak: '開き', wing: '横', neck: '普通', extra: '',     tag: 'Form 04', dims: 'W50.6 × D62.3 × H60.1' },
-  { base: '口開き、羽横、顔普通、wink', beak: '開き', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 05', dims: 'W50.6 × D62.3 × H60.1' },
+  { base: '口閉じ、羽横、顔通常',       beak: '閉じ', wing: '横', neck: '普通', extra: '',     tag: 'Form 01 ／ 基本形', dims: 'W50.6 × D63.0 × H60.1' },
+  { base: '口閉じ、羽横、顔普通、wink', beak: '閉じ', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 02',           dims: 'W50.6 × D63.0 × H60.1' },
+  { base: '口閉じ、羽前、顔通常',       beak: '閉じ', wing: '前', neck: '普通', extra: '',     tag: 'Form 03',           dims: 'W44.0 × D63.0 × H60.1' },
+  { base: '口閉じ、羽前、顔通常、EYE',  beak: '閉じ', wing: '前', neck: '普通', extra: 'EYE',  tag: 'Form 04',           dims: 'W50.6 × D63.0 × H60.1' },
+  { base: '口開き、羽横、顔普通',       beak: '開き', wing: '横', neck: '普通', extra: '',     tag: 'Form 05',           dims: 'W50.6 × D62.3 × H60.1' },
+  { base: '口開き、羽横、顔普通、wink', beak: '開き', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 06',           dims: 'W50.6 × D62.3 × H60.1' },
+  { base: '口開き、羽横、顔斜め',       beak: '開き', wing: '横', neck: '傾き', extra: '',     tag: 'Form 07 ／ 首傾き',  dims: 'W50.6 × D63.7 × H58.1' },
+  { base: '口開き、羽前、顔通常',       beak: '開き', wing: '前', neck: '普通', extra: '',     tag: 'Form 08',           dims: 'W44.0 × D62.3 × H60.1' },
 ];
 // 基本形（閉じ・横・普通）以外を「特殊パーツ」としてハイライト
 const isSpecial = (kind, val) =>
@@ -987,6 +1045,7 @@ const isSpecial = (kind, val) =>
   (kind === 'neck' && val === '傾き');
 
 const enc = (s) => encodeURIComponent(s);
+const formLabel = (f) => `${f.beak}・${f.wing}・${f.neck}${f.extra ? '（' + f.extra + '）' : ''}`;
 
 // ---- カード生成 ----
 const grid = document.getElementById('formsGrid');
@@ -1005,135 +1064,199 @@ FORMS.forEach((f, i) => {
   const el = document.createElement('div');
   el.className = 'form-card';
   el.innerHTML = `
-    <div class="form-name">${f.beak}・${f.wing}・${f.neck}${f.extra ? '（' + f.extra + '）' : ''}
+    <div class="form-name">${formLabel(f)}
       <span class="form-tag">${f.tag}</span></div>
+    <div class="form-viewer" data-idx="${i}">
+      <div class="fv-status">スクロールで3D読込</div>
+      <button class="fv-enlarge" data-enlarge="${i}" title="拡大表示" aria-label="拡大表示">⛶</button>
+      <span class="fv-hint">ドラッグで回転</span>
+    </div>
     <div class="form-parts">${partsHtml}</div>
     <div class="form-dims"><span class="dims-label">外寸</span><span class="dims-val">${f.dims}</span><span class="dims-unit">mm</span></div>
     <div class="form-actions">
-      <button class="form-btn primary" data-idx="${i}">▶ 3Dプレビュー</button>
+      <button class="form-btn primary" data-enlarge="${i}">⛶ 拡大表示</button>
       <a class="form-btn" href="${objHref}" download="${f.base}.obj">OBJ ↓</a>
       <a class="form-btn" href="${stlHref}" download="${f.base}.stl">STL ↓</a>
     </div>`;
   grid.appendChild(el);
 });
 
-// ---- ビューア ----
-const overlay   = document.getElementById('viewerOverlay');
-const wrap       = document.getElementById('viewerCanvasWrap');
-const statusEl   = document.getElementById('viewerStatus');
-const titleEl    = document.getElementById('viewerTitle');
-const dlEl       = document.getElementById('viewerDl');
-const closeBtn   = document.getElementById('viewerClose');
+// ---- 共有ローダー & マテリアル ----
+const stlLoader = new STLLoader();
+const duckMat = () => new THREE.MeshStandardMaterial({ color: 0xf2c94c, roughness: 0.55, metalness: 0.05 });
 
-let renderer, scene, camera, controls, currentMesh, rafId;
-
-function initThree() {
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  wrap.appendChild(renderer.domElement);
-
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(45, 1, 0.1, 5000);
-
+function addLights(scene) {
   scene.add(new THREE.HemisphereLight(0xffffff, 0x4b463c, 1.0));
   const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(1, 1.4, 1); scene.add(key);
   const fill = new THREE.DirectionalLight(0xffe9c2, 0.6); fill.position.set(-1, 0.5, -1); scene.add(fill);
-
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.08;
-
-  const animate = () => {
-    rafId = requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  };
-  animate();
-  window.addEventListener('resize', onResize);
 }
-
-function onResize() {
-  if (!renderer) return;
-  const w = wrap.clientWidth, h = wrap.clientHeight;
-  renderer.setSize(w, h, false);
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-}
-
-function fitCamera(geometry) {
+function fitCamera(camera, controls, geometry, lift = 0.15) {
   geometry.computeBoundingBox();
   const box = geometry.boundingBox;
-  const center = new THREE.Vector3();
-  box.getCenter(center);
-  const size = new THREE.Vector3();
-  box.getSize(size);
+  const center = new THREE.Vector3(); box.getCenter(center);
+  const size = new THREE.Vector3(); box.getSize(size);
   const maxDim = Math.max(size.x, size.y, size.z);
-  const dist = maxDim / (2 * Math.tan((camera.fov * Math.PI / 180) / 2)) * 1.6;
+  const dist = maxDim / (2 * Math.tan((camera.fov * Math.PI / 180) / 2)) * 1.65;
   controls.target.copy(center);
-  camera.position.set(center.x, center.y + size.y * 0.15, center.z + dist);
-  camera.near = maxDim / 100;
-  camera.far  = maxDim * 20;
+  camera.position.set(center.x, center.y + size.y * lift, center.z + dist);
+  camera.near = maxDim / 100; camera.far = maxDim * 20;
   camera.updateProjectionMatrix();
   controls.update();
+  return center;
 }
 
-function clearMesh() {
-  if (currentMesh) {
-    scene.remove(currentMesh);
-    currentMesh.geometry.dispose();
-    currentMesh.material.dispose();
-    currentMesh = null;
+// ---- インライン・ギャラリービューア（遅延読込＋自動回転） ----
+const inlineViewers = [];
+
+function initInlineViewer(el) {
+  const idx = Number(el.dataset.idx);
+  const f = FORMS[idx];
+  const statusEl = el.querySelector('.fv-status');
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  el.insertBefore(renderer.domElement, statusEl);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 4 / 3, 0.1, 5000);
+  addLights(scene);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.1;
+  controls.enablePan = false;
+
+  const v = { el, idx, renderer, scene, camera, controls, mesh: null, pivot: null,
+              visible: true, loaded: false, interacting: false };
+  inlineViewers.push(v);
+
+  controls.addEventListener('start', () => { v.interacting = true; });
+  controls.addEventListener('end',   () => { v.interacting = false; });
+
+  const resize = () => {
+    const w = el.clientWidth, h = el.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+  };
+  v.resize = resize;
+  resize();
+
+  stlLoader.load(enc(f.base + '.stl'),
+    (geometry) => {
+      geometry.computeVertexNormals();
+      const mesh = new THREE.Mesh(geometry, duckMat());
+      // 回転用ピボット（重心中心で自動回転させる）
+      const center = fitCamera(camera, controls, geometry);
+      const pivot = new THREE.Group();
+      mesh.position.sub(center);
+      pivot.position.copy(center);
+      pivot.add(mesh);
+      scene.add(pivot);
+      v.mesh = mesh; v.pivot = pivot; v.loaded = true;
+      statusEl.style.display = 'none';
+      el.classList.add('ready');
+    },
+    undefined,
+    () => {
+      statusEl.style.display = 'flex';
+      statusEl.innerHTML = '3Dを読み込めませんでした。<br>ローカルは「プレビュー起動.command」経由で。';
+    }
+  );
+}
+
+// 全カードを起動時に初期化（STL読込はネットワーク集中を避けて段階的に）
+const viewerEls = [...document.querySelectorAll('.form-viewer')];
+viewerEls.forEach((el, k) => setTimeout(() => initInlineViewer(el), k * 180));
+
+// IntersectionObserver は「画面外は描画を止める」最適化のみ（初期化はしない）
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    const v = inlineViewers.find(x => x.el === entry.target);
+    if (v) v.visible = entry.isIntersecting;
+  });
+}, { rootMargin: '300px 0px', threshold: 0.01 });
+viewerEls.forEach(el => io.observe(el));
+
+// 共有アニメーションループ（可視カードのみ描画・自動回転）
+function tick() {
+  requestAnimationFrame(tick);
+  for (const v of inlineViewers) {
+    if (!v.renderer || !v.visible) continue;
+    if (v.loaded && v.pivot && !v.interacting) v.pivot.rotation.y += 0.006;
+    v.controls.update();
+    v.renderer.render(v.scene, v.camera);
   }
 }
+tick();
 
-function openViewer(idx) {
+window.addEventListener('resize', () => inlineViewers.forEach(v => v.resize && v.resize()));
+
+// ---- 拡大モーダルビューア ----
+const overlay  = document.getElementById('viewerOverlay');
+const wrap     = document.getElementById('viewerCanvasWrap');
+const statusEl = document.getElementById('viewerStatus');
+const titleEl  = document.getElementById('viewerTitle');
+const dlEl     = document.getElementById('viewerDl');
+const closeBtn = document.getElementById('viewerClose');
+
+let mRenderer, mScene, mCamera, mControls, mMesh;
+
+function initModal() {
+  mRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  mRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  wrap.appendChild(mRenderer.domElement);
+  mScene = new THREE.Scene();
+  mCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 5000);
+  addLights(mScene);
+  mControls = new OrbitControls(mCamera, mRenderer.domElement);
+  mControls.enableDamping = true; mControls.dampingFactor = 0.08;
+  const loop = () => { requestAnimationFrame(loop); if (overlay.classList.contains('open')) { mControls.update(); mRenderer.render(mScene, mCamera); } };
+  loop();
+  window.addEventListener('resize', modalResize);
+}
+function modalResize() {
+  if (!mRenderer) return;
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+  mRenderer.setSize(w, h, false);
+  mCamera.aspect = w / h; mCamera.updateProjectionMatrix();
+}
+function clearModalMesh() {
+  if (mMesh) { mScene.remove(mMesh); mMesh.geometry.dispose(); mMesh.material.dispose(); mMesh = null; }
+}
+function openModal(idx) {
   const f = FORMS[idx];
-  if (!renderer) initThree();
+  if (!mRenderer) initModal();
   overlay.classList.add('open');
-  titleEl.textContent = `${f.beak}・${f.wing}・${f.neck}${f.extra ? '（' + f.extra + '）' : ''}`;
+  titleEl.textContent = formLabel(f);
   dlEl.innerHTML =
     `<span style="margin-right:14px;">外寸 ${f.dims} mm</span>` +
     `<a href="${enc(f.base + '.obj')}" download="${f.base}.obj">OBJ ↓</a>　` +
     `<a href="${enc(f.base + '.stl')}" download="${f.base}.stl">STL ↓</a>`;
   statusEl.style.display = 'flex';
   statusEl.textContent = '読み込み中…（初回は数MB。少しお待ちください）';
-  clearMesh();
-  onResize();
-
-  const loader = new STLLoader();
-  loader.load(
-    enc(f.base + '.stl'),
+  clearModalMesh();
+  modalResize();
+  stlLoader.load(enc(f.base + '.stl'),
     (geometry) => {
-      const material = new THREE.MeshStandardMaterial({
-        color: 0xf2c94c, roughness: 0.55, metalness: 0.05, flatShading: false,
-      });
       geometry.computeVertexNormals();
-      currentMesh = new THREE.Mesh(geometry, material);
-      scene.add(currentMesh);
-      fitCamera(geometry);
+      mMesh = new THREE.Mesh(geometry, duckMat());
+      mScene.add(mMesh);
+      fitCamera(mCamera, mControls, geometry);
       statusEl.style.display = 'none';
     },
     undefined,
-    (err) => {
-      console.error(err);
-      statusEl.style.display = 'flex';
-      statusEl.innerHTML = 'STLを読み込めませんでした。<br>「プレビュー起動.command」からローカルサーバー経由で開いてください。';
-    }
+    () => { statusEl.style.display = 'flex'; statusEl.innerHTML = 'STLを読み込めませんでした。<br>「プレビュー起動.command」からローカルサーバー経由で開いてください。'; }
   );
 }
-
-function closeViewer() {
-  overlay.classList.remove('open');
-  clearMesh();
-}
+function closeModal() { overlay.classList.remove('open'); clearModalMesh(); }
 
 grid.addEventListener('click', (e) => {
-  const btn = e.target.closest('button[data-idx]');
-  if (btn) openViewer(Number(btn.dataset.idx));
+  const btn = e.target.closest('[data-enlarge]');
+  if (btn) openModal(Number(btn.dataset.enlarge));
 });
-closeBtn.addEventListener('click', closeViewer);
-overlay.addEventListener('click', (e) => { if (e.target === overlay) closeViewer(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeViewer(); });
+closeBtn.addEventListener('click', closeModal);
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 </script>
 
 </body>
