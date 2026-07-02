@@ -1033,11 +1033,11 @@
   <div class="section-title" id="forms3d" style="margin-top:80px;"><span>3D フォルムデータ</span></div>
 
   <p class="forms3d-intro">
-    せきや氏作成の3D原型（Nomad Sculpt）から書き出したフォルム別データ 全8点。<br>
+    せきや氏作成の3D原型（Nomad Sculpt）から書き出したフォルム別データ 全9点。<br>
     各カードの3Dは <b>斜め45°で静止表示</b>。<b>ドラッグで自由に回転</b>、<b>「↻回転」ボタンで自動回転</b>のON/OFF。<b>OBJ（頂点カラー付き）／ STL（造形・3Dプリント用）</b> をダウンロードできます。<br>
     <span style="font-size:12px;">※ 口ばし（開き/閉じ）× 羽（前/横）× 首（普通/傾き）＋ wink・EYE の派生を含む。首傾き系（顔斜め）・開き×前も収録済み。</span><br>
     <span style="font-size:12px;">※ 外寸は各STLの実測バウンディングボックス（W幅×D奥行×H高さ／mm換算）。量産スケールは別途調整。</span><br>
-    <span style="font-size:12px;">※ 各カードに「そのフォルムを使うカラー」を表示。⑤クリームイエロー（閉じ・横・傾き）は対応3D未提供。</span>
+    <span style="font-size:12px;">※ 各カードに「そのフォルムを使うカラー」を表示。全13色の対応3Dが揃いました。</span>
   </p>
 
   <div class="forms-grid" id="formsGrid"></div>
@@ -1095,14 +1095,15 @@ import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 
 // ---- フォルム定義（basename＝拡張子なしのファイル名） ----
 const FORMS = [
-  { base: '口閉じ、羽横、顔通常',       beak: '閉じ', wing: '横', neck: '普通', extra: '',     tag: 'Form 01 ／ 基本形', dims: 'W50.6 × D63.0 × H60.1' },
-  { base: '口閉じ、羽横、顔普通、wink', beak: '閉じ', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 02',           dims: 'W50.6 × D63.0 × H60.1' },
-  { base: '口閉じ、羽前、顔通常',       beak: '閉じ', wing: '前', neck: '普通', extra: '',     tag: 'Form 03',           dims: 'W44.0 × D63.0 × H60.1' },
-  { base: '口閉じ、羽前、顔通常、EYE',  beak: '閉じ', wing: '前', neck: '普通', extra: 'EYE',  tag: 'Form 04',           dims: 'W50.6 × D63.0 × H60.1' },
-  { base: '口開き、羽横、顔普通',       beak: '開き', wing: '横', neck: '普通', extra: '',     tag: 'Form 05',           dims: 'W50.6 × D62.3 × H60.1' },
-  { base: '口開き、羽横、顔普通、wink', beak: '開き', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 06',           dims: 'W50.6 × D62.3 × H60.1' },
-  { base: '口開き、羽横、顔斜め',       beak: '開き', wing: '横', neck: '傾き', extra: '',     tag: 'Form 07 ／ 首傾き',  dims: 'W50.6 × D63.7 × H58.1' },
-  { base: '口開き、羽前、顔通常',       beak: '開き', wing: '前', neck: '普通', extra: '',     tag: 'Form 08',           dims: 'W44.0 × D62.3 × H60.1' },
+  { key: 'CSN',  base: '口閉じ、羽横、顔通常',       beak: '閉じ', wing: '横', neck: '普通', extra: '',     tag: 'Form 01 ／ 基本形', dims: 'W50.6 × D63.0 × H60.1' },
+  { key: 'CSNw', base: '口閉じ、羽横、顔普通、wink', beak: '閉じ', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 02',           dims: 'W50.6 × D63.0 × H60.1' },
+  { key: 'CST',  base: '口閉じ、羽横、顔斜め',       beak: '閉じ', wing: '横', neck: '傾き', extra: '',     tag: 'Form 03 ／ 首傾き',  dims: 'W50.6 × D64.3 × H58.1' },
+  { key: 'CFN',  base: '口閉じ、羽前、顔通常',       beak: '閉じ', wing: '前', neck: '普通', extra: '',     tag: 'Form 04',           dims: 'W44.0 × D63.0 × H60.1' },
+  { key: 'CFNe', base: '口閉じ、羽前、顔通常、EYE',  beak: '閉じ', wing: '前', neck: '普通', extra: 'EYE',  tag: 'Form 05',           dims: 'W50.6 × D63.0 × H60.1' },
+  { key: 'OSN',  base: '口開き、羽横、顔普通',       beak: '開き', wing: '横', neck: '普通', extra: '',     tag: 'Form 06',           dims: 'W50.6 × D62.3 × H60.1' },
+  { key: 'OSNw', base: '口開き、羽横、顔普通、wink', beak: '開き', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 07',           dims: 'W50.6 × D62.3 × H60.1' },
+  { key: 'OST',  base: '口開き、羽横、顔斜め',       beak: '開き', wing: '横', neck: '傾き', extra: '',     tag: 'Form 08 ／ 首傾き',  dims: 'W50.6 × D63.7 × H58.1' },
+  { key: 'OFN',  base: '口開き、羽前、顔通常',       beak: '開き', wing: '前', neck: '普通', extra: '',     tag: 'Form 09',           dims: 'W44.0 × D62.3 × H60.1' },
 ];
 // 基本形（閉じ・横・普通）以外を「特殊パーツ」としてハイライト
 const isSpecial = (kind, val) =>
@@ -1130,12 +1131,12 @@ const COLORS = [
   { no: 13, name: 'オーロライエロー',      beak: '閉じ', wing: '横', neck: '普通' },
 ];
 const colorImg = (no) => `images/duck_${String(no).padStart(2, '0')}.png`;
-// 手動オーバーライド（カラー番号 → FORMS のindex）。指定色は自動判定より優先。
-// 13→Form04(閉じ・前・普通 EYE=idx3) / 09→Form06(開き・横・普通 wink=idx5) / 10→Form06(idx5)
-const COLOR_FORM_OVERRIDE = { 9: 5, 10: 5, 13: 3 };
+// 手動オーバーライド（カラー番号 → フォルムkey）。指定色は自動判定より優先。
+// 13→EYE(閉じ・前・普通EYE) / 09→開き横wink / 10→開き横wink
+const COLOR_FORM_OVERRIDE = { 9: 'OSNw', 10: 'OSNw', 13: 'CFNe' };
 // 各フォルムに割り当てる色：オーバーライド優先、無ければ基本フォルムのみ口ばし/羽/首の一致で紐付け
-const colorsForForm = (f, idx) => COLORS.filter(c => {
-  if (c.no in COLOR_FORM_OVERRIDE) return COLOR_FORM_OVERRIDE[c.no] === idx;
+const colorsForForm = (f) => COLORS.filter(c => {
+  if (c.no in COLOR_FORM_OVERRIDE) return COLOR_FORM_OVERRIDE[c.no] === f.key;
   return !f.extra && c.beak === f.beak && c.wing === f.wing && c.neck === f.neck;
 });
 
@@ -1153,7 +1154,7 @@ FORMS.forEach((f, i) => {
     `<span class="form-part${isSpecial(p.kind, p.val) ? ' special' : ''}">${p.label}：<b>${p.val}</b></span>`
   ).join('') + (f.extra ? `<span class="form-part">${f.extra}</span>` : '');
 
-  const cols = colorsForForm(f, i);
+  const cols = colorsForForm(f);
   const colorsHtml = cols.length
     ? `<div class="fc-label">このフォルムを使うカラー（${cols.length}）</div>
        <div class="fc-strip">${cols.map(c =>
