@@ -583,6 +583,44 @@
     color: var(--hero);
   }
   .form-part.special b { color: var(--hero); }
+  .form-colors {
+    border-top: 1px dashed var(--line);
+    padding-top: 14px;
+  }
+  .fc-label {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .fc-label.none { color: var(--ink-soft); font-style: normal; }
+  .fc-strip { display: flex; flex-wrap: wrap; gap: 8px; }
+  .fc-chip {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    padding: 3px 12px 3px 3px;
+  }
+  .fc-thumb {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #fff;
+    border: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .fc-name {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 10px;
+    color: var(--ink);
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .fc-name b { color: var(--gold); font-weight: 700; margin-right: 3px; }
   .form-actions {
     display: flex;
     gap: 10px;
@@ -998,7 +1036,8 @@
     せきや氏作成の3D原型（Nomad Sculpt）から書き出したフォルム別データ 全8点。<br>
     各カードの3Dは <b>斜め45°で静止表示</b>。<b>ドラッグで自由に回転</b>、<b>「↻回転」ボタンで自動回転</b>のON/OFF。<b>OBJ（頂点カラー付き）／ STL（造形・3Dプリント用）</b> をダウンロードできます。<br>
     <span style="font-size:12px;">※ 口ばし（開き/閉じ）× 羽（前/横）× 首（普通/傾き）＋ wink・EYE の派生を含む。首傾き系（顔斜め）・開き×前も収録済み。</span><br>
-    <span style="font-size:12px;">※ 外寸は各STLの実測バウンディングボックス（W幅×D奥行×H高さ／mm換算）。量産スケールは別途調整。</span>
+    <span style="font-size:12px;">※ 外寸は各STLの実測バウンディングボックス（W幅×D奥行×H高さ／mm換算）。量産スケールは別途調整。</span><br>
+    <span style="font-size:12px;">※ 各カードに「そのフォルムを使うカラー」を表示。⑤クリームイエロー（閉じ・横・傾き）は対応3D未提供。</span>
   </p>
 
   <div class="forms-grid" id="formsGrid"></div>
@@ -1074,6 +1113,26 @@ const isSpecial = (kind, val) =>
 const enc = (s) => encodeURIComponent(s);
 const formLabel = (f) => `${f.beak}・${f.wing}・${f.neck}${f.extra ? '（' + f.extra + '）' : ''}`;
 
+// ---- 13カラー定義（上部ラインナップと同一。フォルム対応の紐付け用） ----
+const COLORS = [
+  { no: 1,  name: 'パールホワイト',        beak: '閉じ', wing: '横', neck: '普通' },
+  { no: 2,  name: 'ベビーブルー',          beak: '閉じ', wing: '横', neck: '普通' },
+  { no: 3,  name: 'ミントグリーン',        beak: '開き', wing: '横', neck: '普通' },
+  { no: 4,  name: 'ラベンダー',            beak: '開き', wing: '横', neck: '傾き' },
+  { no: 5,  name: 'クリームイエロー',      beak: '閉じ', wing: '横', neck: '傾き' },
+  { no: 6,  name: 'ハートフェルトピンク',  beak: '閉じ', wing: '前', neck: '普通' },
+  { no: 7,  name: 'ムードグラデPINK',      beak: '閉じ', wing: '横', neck: '普通' },
+  { no: 8,  name: 'アンバー',              beak: '開き', wing: '前', neck: '普通' },
+  { no: 9,  name: 'ビビッドイエロー',      beak: '閉じ', wing: '横', neck: '普通' },
+  { no: 10, name: 'ブライトブルー',        beak: '開き', wing: '横', neck: '普通' },
+  { no: 11, name: 'ピュアレッド',          beak: '閉じ', wing: '前', neck: '普通' },
+  { no: 12, name: 'ダスティブラック',      beak: '閉じ', wing: '横', neck: '普通' },
+  { no: 13, name: 'オーロライエロー',      beak: '閉じ', wing: '横', neck: '普通' },
+];
+const colorImg = (no) => `images/duck_${String(no).padStart(2, '0')}.png`;
+// wink/EYE派生には色を割り当てない（基本フォルムのみ・口ばし/羽/首の一致で紐付け）
+const colorsForForm = (f) => f.extra ? [] : COLORS.filter(c => c.beak === f.beak && c.wing === f.wing && c.neck === f.neck);
+
 // ---- カード生成 ----
 const grid = document.getElementById('formsGrid');
 FORMS.forEach((f, i) => {
@@ -1088,6 +1147,14 @@ FORMS.forEach((f, i) => {
     `<span class="form-part${isSpecial(p.kind, p.val) ? ' special' : ''}">${p.label}：<b>${p.val}</b></span>`
   ).join('') + (f.extra ? `<span class="form-part">${f.extra}</span>` : '');
 
+  const cols = colorsForForm(f);
+  const colorsHtml = cols.length
+    ? `<div class="fc-label">このフォルムを使うカラー（${cols.length}）</div>
+       <div class="fc-strip">${cols.map(c =>
+         `<span class="fc-chip"><img class="fc-thumb" src="${colorImg(c.no)}" alt="${c.name}" loading="lazy"><span class="fc-name"><b>${String(c.no).padStart(2, '0')}</b>${c.name}</span></span>`
+       ).join('')}</div>`
+    : `<div class="fc-label none">派生フォルム（wink / EYE）― 現ラインナップに対応色なし</div>`;
+
   const el = document.createElement('div');
   el.className = 'form-card';
   el.innerHTML = `
@@ -1101,6 +1168,7 @@ FORMS.forEach((f, i) => {
     </div>
     <div class="form-parts">${partsHtml}</div>
     <div class="form-dims"><span class="dims-label">外寸</span><span class="dims-val">${f.dims}</span><span class="dims-unit">mm</span></div>
+    <div class="form-colors">${colorsHtml}</div>
     <div class="form-actions">
       <button class="form-btn primary" data-enlarge="${i}">⛶ 拡大表示</button>
       <a class="form-btn" href="${objHref}" download="${f.base}.obj">OBJ ↓</a>
