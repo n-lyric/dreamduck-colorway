@@ -1058,7 +1058,7 @@ const FORMS = [
   { key: 'CSNw', base: '口閉じ、羽横、顔普通、wink', beak: '閉じ', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 02',           dims: 'W50.6 × D63.0 × H60.1' },
   { key: 'CST',  base: '口閉じ、羽横、顔斜め',       beak: '閉じ', wing: '横', neck: '傾き', extra: '',     tag: 'Form 03 ／ 首傾き',  dims: 'W50.6 × D64.3 × H58.1' },
   { key: 'CFN',  base: '口閉じ、羽前、顔通常',       beak: '閉じ', wing: '前', neck: '普通', extra: '',     tag: 'Form 04',           dims: 'W44.0 × D63.0 × H60.1' },
-  { key: 'CFNe', base: '口閉じ、羽前、顔通常、EYE',  beak: '閉じ', wing: '前', neck: '普通', extra: 'EYE',  tag: 'Form 05',           dims: 'W50.6 × D63.0 × H60.1' },
+  { key: 'CSNe', base: '口閉じ、羽横、顔通常、EYE',  beak: '閉じ', wing: '横', neck: '普通', extra: 'EYE',  tag: 'Form 05',           dims: 'W50.6 × D63.0 × H60.1' },
   { key: 'OSN',  base: '口開き、羽横、顔普通',       beak: '開き', wing: '横', neck: '普通', extra: '',     tag: 'Form 06',           dims: 'W50.6 × D62.3 × H60.1' },
   { key: 'OSNw', base: '口開き、羽横、顔普通、wink', beak: '開き', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 07',           dims: 'W50.6 × D62.3 × H60.1' },
   { key: 'OST',  base: '口開き、羽横、顔斜め',       beak: '開き', wing: '横', neck: '傾き', extra: '',     tag: 'Form 08 ／ 首傾き',  dims: 'W50.6 × D63.7 × H58.1' },
@@ -1091,8 +1091,8 @@ const COLORS = [
 ];
 const colorImg = (no) => `images/duck_${String(no).padStart(2, '0')}.png`;
 // 手動オーバーライド（カラー番号 → フォルムkey）。指定色は自動判定より優先。
-// 13→EYE(閉じ・前・普通EYE) / 09→Form02(閉じ・横・普通wink) / 10→開き横wink
-const COLOR_FORM_OVERRIDE = { 9: 'CSNw', 10: 'OSNw', 13: 'CFNe' };
+// 13→EYE(閉じ・横・普通EYE) / 09→Form02(閉じ・横・普通wink) / 10→開き横wink
+const COLOR_FORM_OVERRIDE = { 9: 'CSNw', 10: 'OSNw', 13: 'CSNe' };
 // 各フォルムに割り当てる色：オーバーライド優先、無ければ基本フォルムのみ口ばし/羽/首の一致で紐付け
 const colorsForForm = (f) => COLORS.filter(c => {
   if (c.no in COLOR_FORM_OVERRIDE) return COLOR_FORM_OVERRIDE[c.no] === f.key;
