@@ -474,6 +474,30 @@
     color: var(--ink-soft);
   }
   .form-part b { color: var(--ink); font-weight: 700; }
+  .form-dims {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: "Noto Sans JP", sans-serif;
+    background: var(--accent-soft);
+    border-radius: 4px;
+    padding: 8px 12px;
+  }
+  .form-dims .dims-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+  .form-dims .dims-val {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+  }
+  .form-dims .dims-unit {
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
   .form-part.special {
     background: #fde8e8;
     border-color: #f3c9c9;
@@ -894,7 +918,8 @@
   <p class="forms3d-intro">
     せきや氏作成の3D原型（Nomad Sculpt）から書き出したフォルム別データ。<br>
     各フォルムを <b>その場で回して確認</b>でき、<b>OBJ（頂点カラー付き）／ STL（造形・3Dプリント用）</b> をダウンロードできます。<br>
-    <span style="font-size:12px;">※ 現状は基本形まわりの5フォルム。首傾き系・開き×前などの組み合わせは追加予定。</span>
+    <span style="font-size:12px;">※ 現状は基本形まわりの5フォルム。首傾き系・開き×前などの組み合わせは追加予定。</span><br>
+    <span style="font-size:12px;">※ 外寸は各STLの実測バウンディングボックス（W幅×D奥行×H高さ／mm換算）。量産スケールは別途調整。</span>
   </p>
 
   <div class="forms-grid" id="formsGrid"></div>
@@ -949,11 +974,11 @@ import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 
 // ---- フォルム定義（basename＝拡張子なしのファイル名） ----
 const FORMS = [
-  { base: '口閉じ、羽前、顔通常',       beak: '閉じ', wing: '前', neck: '普通', extra: '',     tag: 'Form 01' },
-  { base: '口閉じ、羽前、顔通常、EYE',  beak: '閉じ', wing: '前', neck: '普通', extra: 'EYE',  tag: 'Form 02' },
-  { base: '口閉じ、羽横、顔普通、wink', beak: '閉じ', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 03 ／ 基本形' },
-  { base: '口開き、羽横、顔普通',       beak: '開き', wing: '横', neck: '普通', extra: '',     tag: 'Form 04' },
-  { base: '口開き、羽横、顔普通、wink', beak: '開き', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 05' },
+  { base: '口閉じ、羽前、顔通常',       beak: '閉じ', wing: '前', neck: '普通', extra: '',     tag: 'Form 01', dims: 'W44.0 × D63.0 × H60.1' },
+  { base: '口閉じ、羽前、顔通常、EYE',  beak: '閉じ', wing: '前', neck: '普通', extra: 'EYE',  tag: 'Form 02', dims: 'W50.6 × D63.0 × H60.1' },
+  { base: '口閉じ、羽横、顔普通、wink', beak: '閉じ', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 03 ／ 基本形', dims: 'W50.6 × D63.0 × H60.1' },
+  { base: '口開き、羽横、顔普通',       beak: '開き', wing: '横', neck: '普通', extra: '',     tag: 'Form 04', dims: 'W50.6 × D62.3 × H60.1' },
+  { base: '口開き、羽横、顔普通、wink', beak: '開き', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 05', dims: 'W50.6 × D62.3 × H60.1' },
 ];
 // 基本形（閉じ・横・普通）以外を「特殊パーツ」としてハイライト
 const isSpecial = (kind, val) =>
@@ -983,6 +1008,7 @@ FORMS.forEach((f, i) => {
     <div class="form-name">${f.beak}・${f.wing}・${f.neck}${f.extra ? '（' + f.extra + '）' : ''}
       <span class="form-tag">${f.tag}</span></div>
     <div class="form-parts">${partsHtml}</div>
+    <div class="form-dims"><span class="dims-label">外寸</span><span class="dims-val">${f.dims}</span><span class="dims-unit">mm</span></div>
     <div class="form-actions">
       <button class="form-btn primary" data-idx="${i}">▶ 3Dプレビュー</button>
       <a class="form-btn" href="${objHref}" download="${f.base}.obj">OBJ ↓</a>
@@ -1066,6 +1092,7 @@ function openViewer(idx) {
   overlay.classList.add('open');
   titleEl.textContent = `${f.beak}・${f.wing}・${f.neck}${f.extra ? '（' + f.extra + '）' : ''}`;
   dlEl.innerHTML =
+    `<span style="margin-right:14px;">外寸 ${f.dims} mm</span>` +
     `<a href="${enc(f.base + '.obj')}" download="${f.base}.obj">OBJ ↓</a>　` +
     `<a href="${enc(f.base + '.stl')}" download="${f.base}.stl">STL ↓</a>`;
   statusEl.style.display = 'flex';
