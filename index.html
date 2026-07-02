@@ -553,6 +553,30 @@
   }
   .form-viewer.ready .fv-enlarge { display: flex; }
   .fv-enlarge:hover { background: rgba(0,0,0,.6); }
+  .fv-rotate {
+    position: absolute;
+    right: 46px; top: 8px;
+    background: rgba(0,0,0,.35);
+    color: #f5ede2;
+    border: none;
+    border-radius: 4px;
+    height: 30px;
+    padding: 0 10px;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    gap: 5px;
+    line-height: 1;
+  }
+  .form-viewer.ready .fv-rotate { display: inline-flex; }
+  .fv-rotate:hover { background: rgba(0,0,0,.6); }
+  .fv-rotate .ico { display: inline-block; transition: transform .3s ease; }
+  .fv-rotate.on { background: var(--gold); color: #fff; }
+  .fv-rotate.on .ico { animation: fvspin 1.6s linear infinite; }
+  @keyframes fvspin { to { transform: rotate(360deg); } }
   .form-part.special {
     background: #fde8e8;
     border-color: #f3c9c9;
@@ -972,7 +996,7 @@
 
   <p class="forms3d-intro">
     せきや氏作成の3D原型（Nomad Sculpt）から書き出したフォルム別データ 全8点。<br>
-    各カードの3Dは <b>自動で回転</b>、<b>ドラッグでその場で確認</b>でき、<b>OBJ（頂点カラー付き）／ STL（造形・3Dプリント用）</b> をダウンロードできます。<br>
+    各カードの3Dは <b>斜め45°で静止表示</b>。<b>ドラッグで自由に回転</b>、<b>「↻回転」ボタンで自動回転</b>のON/OFF。<b>OBJ（頂点カラー付き）／ STL（造形・3Dプリント用）</b> をダウンロードできます。<br>
     <span style="font-size:12px;">※ 口ばし（開き/閉じ）× 羽（前/横）× 首（普通/傾き）＋ wink・EYE の派生を含む。首傾き系（顔斜め）・開き×前も収録済み。</span><br>
     <span style="font-size:12px;">※ 外寸は各STLの実測バウンディングボックス（W幅×D奥行×H高さ／mm換算）。量産スケールは別途調整。</span>
   </p>
@@ -984,7 +1008,10 @@
     <div class="viewer-box">
       <div class="viewer-head">
         <span class="v-title"><span>🦆</span><span id="viewerTitle">3D プレビュー</span></span>
-        <button class="viewer-close" id="viewerClose" aria-label="閉じる">×</button>
+        <span style="display:flex;align-items:center;gap:8px;">
+          <button class="fv-rotate" id="viewerRotate" title="自動回転 ON/OFF" style="position:static;display:inline-flex;"><span class="ico">↻</span>回転</button>
+          <button class="viewer-close" id="viewerClose" aria-label="閉じる">×</button>
+        </span>
       </div>
       <div class="viewer-canvas-wrap" id="viewerCanvasWrap">
         <div class="viewer-status" id="viewerStatus">読み込み中…</div>
@@ -1067,7 +1094,8 @@ FORMS.forEach((f, i) => {
     <div class="form-name">${formLabel(f)}
       <span class="form-tag">${f.tag}</span></div>
     <div class="form-viewer" data-idx="${i}">
-      <div class="fv-status">スクロールで3D読込</div>
+      <div class="fv-status">3D読込中…</div>
+      <button class="fv-rotate" data-rotate="${i}" title="自動回転 ON/OFF" aria-label="自動回転"><span class="ico">↻</span>回転</button>
       <button class="fv-enlarge" data-enlarge="${i}" title="拡大表示" aria-label="拡大表示">⛶</button>
       <span class="fv-hint">ドラッグで回転</span>
     </div>
@@ -1090,7 +1118,10 @@ function addLights(scene) {
   const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(1, 1.4, 1); scene.add(key);
   const fill = new THREE.DirectionalLight(0xffe9c2, 0.6); fill.position.set(-1, 0.5, -1); scene.add(fill);
 }
-function fitCamera(camera, controls, geometry, lift = 0.15) {
+// 斜め前・やや上からの3/4ビューで静止させる
+const VIEW_AZ = THREE.MathUtils.degToRad(35);  // 正面から右へ35°
+const VIEW_EL = THREE.MathUtils.degToRad(18);  // やや見下ろし18°
+function fitCamera(camera, controls, geometry) {
   geometry.computeBoundingBox();
   const box = geometry.boundingBox;
   const center = new THREE.Vector3(); box.getCenter(center);
@@ -1098,7 +1129,11 @@ function fitCamera(camera, controls, geometry, lift = 0.15) {
   const maxDim = Math.max(size.x, size.y, size.z);
   const dist = maxDim / (2 * Math.tan((camera.fov * Math.PI / 180) / 2)) * 1.65;
   controls.target.copy(center);
-  camera.position.set(center.x, center.y + size.y * lift, center.z + dist);
+  camera.position.set(
+    center.x + dist * Math.sin(VIEW_AZ) * Math.cos(VIEW_EL),
+    center.y + dist * Math.sin(VIEW_EL) + size.y * 0.04,
+    center.z + dist * Math.cos(VIEW_AZ) * Math.cos(VIEW_EL)
+  );
   camera.near = maxDim / 100; camera.far = maxDim * 20;
   camera.updateProjectionMatrix();
   controls.update();
@@ -1126,7 +1161,7 @@ function initInlineViewer(el) {
   controls.enablePan = false;
 
   const v = { el, idx, renderer, scene, camera, controls, mesh: null, pivot: null,
-              visible: true, loaded: false, interacting: false };
+              visible: true, loaded: false, interacting: false, autoRotate: false };
   inlineViewers.push(v);
 
   controls.addEventListener('start', () => { v.interacting = true; });
@@ -1182,7 +1217,7 @@ function tick() {
   requestAnimationFrame(tick);
   for (const v of inlineViewers) {
     if (!v.renderer || !v.visible) continue;
-    if (v.loaded && v.pivot && !v.interacting) v.pivot.rotation.y += 0.006;
+    if (v.loaded && v.pivot && v.autoRotate && !v.interacting) v.pivot.rotation.y += 0.01;
     v.controls.update();
     v.renderer.render(v.scene, v.camera);
   }
@@ -1199,7 +1234,8 @@ const titleEl  = document.getElementById('viewerTitle');
 const dlEl     = document.getElementById('viewerDl');
 const closeBtn = document.getElementById('viewerClose');
 
-let mRenderer, mScene, mCamera, mControls, mMesh;
+let mRenderer, mScene, mCamera, mControls, mMesh, mAutoRotate = false, mInteracting = false;
+const rotateBtn = document.getElementById('viewerRotate');
 
 function initModal() {
   mRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -1210,10 +1246,23 @@ function initModal() {
   addLights(mScene);
   mControls = new OrbitControls(mCamera, mRenderer.domElement);
   mControls.enableDamping = true; mControls.dampingFactor = 0.08;
-  const loop = () => { requestAnimationFrame(loop); if (overlay.classList.contains('open')) { mControls.update(); mRenderer.render(mScene, mCamera); } };
+  mControls.addEventListener('start', () => { mInteracting = true; });
+  mControls.addEventListener('end',   () => { mInteracting = false; });
+  const loop = () => {
+    requestAnimationFrame(loop);
+    if (overlay.classList.contains('open')) {
+      if (mMesh && mAutoRotate && !mInteracting) mMesh.rotation.y += 0.01;
+      mControls.update();
+      mRenderer.render(mScene, mCamera);
+    }
+  };
   loop();
   window.addEventListener('resize', modalResize);
 }
+rotateBtn.addEventListener('click', () => {
+  mAutoRotate = !mAutoRotate;
+  rotateBtn.classList.toggle('on', mAutoRotate);
+});
 function modalResize() {
   if (!mRenderer) return;
   const w = wrap.clientWidth, h = wrap.clientHeight;
@@ -1227,6 +1276,7 @@ function openModal(idx) {
   const f = FORMS[idx];
   if (!mRenderer) initModal();
   overlay.classList.add('open');
+  mAutoRotate = false; rotateBtn.classList.remove('on');
   titleEl.textContent = formLabel(f);
   dlEl.innerHTML =
     `<span style="margin-right:14px;">外寸 ${f.dims} mm</span>` +
@@ -1251,6 +1301,12 @@ function openModal(idx) {
 function closeModal() { overlay.classList.remove('open'); clearModalMesh(); }
 
 grid.addEventListener('click', (e) => {
+  const rot = e.target.closest('[data-rotate]');
+  if (rot) {
+    const v = inlineViewers.find(x => x.idx === Number(rot.dataset.rotate));
+    if (v) { v.autoRotate = !v.autoRotate; rot.classList.toggle('on', v.autoRotate); }
+    return;
+  }
   const btn = e.target.closest('[data-enlarge]');
   if (btn) openModal(Number(btn.dataset.enlarge));
 });
