@@ -1130,8 +1130,14 @@ const COLORS = [
   { no: 13, name: 'オーロライエロー',      beak: '閉じ', wing: '横', neck: '普通' },
 ];
 const colorImg = (no) => `images/duck_${String(no).padStart(2, '0')}.png`;
-// wink/EYE派生には色を割り当てない（基本フォルムのみ・口ばし/羽/首の一致で紐付け）
-const colorsForForm = (f) => f.extra ? [] : COLORS.filter(c => c.beak === f.beak && c.wing === f.wing && c.neck === f.neck);
+// 手動オーバーライド（カラー番号 → FORMS のindex）。指定色は自動判定より優先。
+// 13→Form04(閉じ・前・普通 EYE=idx3) / 09→Form06(開き・横・普通 wink=idx5) / 10→Form06(idx5)
+const COLOR_FORM_OVERRIDE = { 9: 5, 10: 5, 13: 3 };
+// 各フォルムに割り当てる色：オーバーライド優先、無ければ基本フォルムのみ口ばし/羽/首の一致で紐付け
+const colorsForForm = (f, idx) => COLORS.filter(c => {
+  if (c.no in COLOR_FORM_OVERRIDE) return COLOR_FORM_OVERRIDE[c.no] === idx;
+  return !f.extra && c.beak === f.beak && c.wing === f.wing && c.neck === f.neck;
+});
 
 // ---- カード生成 ----
 const grid = document.getElementById('formsGrid');
@@ -1147,7 +1153,7 @@ FORMS.forEach((f, i) => {
     `<span class="form-part${isSpecial(p.kind, p.val) ? ' special' : ''}">${p.label}：<b>${p.val}</b></span>`
   ).join('') + (f.extra ? `<span class="form-part">${f.extra}</span>` : '');
 
-  const cols = colorsForForm(f);
+  const cols = colorsForForm(f, i);
   const colorsHtml = cols.length
     ? `<div class="fc-label">このフォルムを使うカラー（${cols.length}）</div>
        <div class="fc-strip">${cols.map(c =>
