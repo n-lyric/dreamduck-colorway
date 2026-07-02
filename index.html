@@ -1033,7 +1033,7 @@
   <div class="section-title" id="forms3d" style="margin-top:80px;"><span>3D フォルムデータ</span></div>
 
   <p class="forms3d-intro">
-    せきや氏作成の3D原型（Nomad Sculpt）から書き出したフォルム別データ 全10点。<br>
+    せきや氏作成の3D原型（Nomad Sculpt）から書き出したフォルム別データ 全9点。<br>
     各カードの3Dは <b>斜め45°で静止表示</b>。<b>ドラッグで自由に回転</b>、<b>「↻回転」ボタンで自動回転</b>のON/OFF。<b>OBJ（頂点カラー付き）／ STL（造形・3Dプリント用）</b> をダウンロードできます。<br>
     <span style="font-size:12px;">※ 口ばし（開き/閉じ）× 羽（前/横）× 首（普通/傾き）＋ wink・EYE の派生を含む。首傾き系（顔斜め）・開き×前も収録済み。</span><br>
     <span style="font-size:12px;">※ 外寸は各STLの実測バウンディングボックス（W幅×D奥行×H高さ／mm換算）。量産スケールは別途調整。</span><br>
@@ -1104,7 +1104,6 @@ const FORMS = [
   { key: 'OSNw', base: '口開き、羽横、顔普通、wink', beak: '開き', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 07',           dims: 'W50.6 × D62.3 × H60.1' },
   { key: 'OST',  base: '口開き、羽横、顔斜め',       beak: '開き', wing: '横', neck: '傾き', extra: '',     tag: 'Form 08 ／ 首傾き',  dims: 'W50.6 × D63.7 × H58.1' },
   { key: 'OFN',  base: '口開き、羽前、顔通常',       beak: '開き', wing: '前', neck: '普通', extra: '',     tag: 'Form 09',           dims: 'W44.0 × D62.3 × H60.1' },
-  { key: 'OFNe', base: '口開き、羽前、顔通常、EYE',  beak: '開き', wing: '前', neck: '普通', extra: 'EYE',  tag: 'Form 10',           dims: 'W50.6 × D62.3 × H60.1' },
 ];
 // 基本形（閉じ・横・普通）以外を「特殊パーツ」としてハイライト
 const isSpecial = (kind, val) =>
