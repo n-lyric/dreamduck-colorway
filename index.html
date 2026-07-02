@@ -730,10 +730,139 @@
   @media print {
     #forms3d, .viewer-overlay { display: none !important; }
   }
+
+  /* ===== PASSWORD GATE ===== */
+  .pwgate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background:
+      radial-gradient(ellipse at 30% 20%, #fff6e6 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 80%, #f3e6d4 0%, transparent 60%),
+      var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .pwgate.hidden { display: none; }
+  .pwgate-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 44px 40px 40px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(40,30,15,.10);
+  }
+  .pwgate-eyebrow {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .pwgate-title {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .pwgate-note {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.8;
+    margin-bottom: 26px;
+  }
+  .pwgate-input {
+    width: 100%;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    padding: 13px 14px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--ink);
+    outline: none;
+    transition: border-color .2s ease;
+  }
+  .pwgate-input:focus { border-color: var(--accent); }
+  .pwgate-btn {
+    margin-top: 14px;
+    width: 100%;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    padding: 13px;
+    border: none;
+    border-radius: 4px;
+    background: var(--gold);
+    color: #fff;
+    cursor: pointer;
+    transition: background .2s ease;
+  }
+  .pwgate-btn:hover { background: var(--accent); }
+  .pwgate-error {
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--hero);
+    letter-spacing: 0.05em;
+    min-height: 1em;
+    opacity: 0;
+    transition: opacity .2s ease;
+  }
+  .pwgate-error.show { opacity: 1; }
 </style>
 </head>
 
 <body>
+
+<!-- PASSWORD GATE -->
+<div class="pwgate" id="pwgate">
+  <div class="pwgate-card">
+    <div class="pwgate-eyebrow">Dream Duck ／ Confidential</div>
+    <div class="pwgate-title">ドリームダック 確認用サイト</div>
+    <div class="pwgate-note">未発表資料のため、閲覧にはパスワードが必要です。<br>ご案内したパスワードをご入力ください。</div>
+    <input type="password" class="pwgate-input" id="pwInput" placeholder="パスワード" autocomplete="off" autofocus>
+    <button class="pwgate-btn" id="pwBtn">閲覧する</button>
+    <div class="pwgate-error" id="pwErr">パスワードが違います。</div>
+  </div>
+</div>
+<script>
+(function () {
+  var HASH = '40aec3314f9f8026c87121aff2a383fff61542f92e4e1fa71b46621045a09652';
+  var KEY = 'dd_colorway_auth';
+  var gate = document.getElementById('pwgate');
+  var input = document.getElementById('pwInput');
+  var btn = document.getElementById('pwBtn');
+  var err = document.getElementById('pwErr');
+
+  try { if (sessionStorage.getItem(KEY) === '1') { gate.classList.add('hidden'); return; } } catch (e) {}
+
+  async function sha256hex(str) {
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+  }
+  async function tryAuth() {
+    var h = await sha256hex(input.value.trim());
+    if (h === HASH) {
+      try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+      gate.classList.add('hidden');
+    } else {
+      err.classList.add('show');
+      input.value = '';
+      input.focus();
+    }
+  }
+  btn.addEventListener('click', tryAuth);
+  input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryAuth(); });
+})();
+</script>
 
 <header>
   <div class="eyebrow">Lyric × MASTAR DESIGN</div>
