@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ドリームダック カラバリ仕様書｜全13色</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf6f0;
+    --bg-soft: #f5ede2;
+    --ink: #2a2622;
+    --ink-soft: #5b544c;
+    --line: #e6dcc9;
+    --accent: #c89d63;
+    --accent-soft: #f0e4cf;
+    --gold: #b8924a;
+    --gold-soft: #e8d9b5;
+    --secret: #6b5b8a;
+    --hero: #d65a5a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: "Noto Serif JP", "Hiragino Mincho ProN", serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background:
+      radial-gradient(ellipse at 30% 20%, #fff6e6 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 80%, #f3e6d4 0%, transparent 60%),
+      var(--bg);
+    padding: 80px 40px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .eyebrow {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    margin-bottom: 12px;
+  }
+
+  .sub {
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 0.2em;
+  }
+
+  .meta-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.15em;
+  }
+  .meta-row span strong {
+    color: var(--ink);
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  /* ===== LEGEND ===== */
+  .legend {
+    max-width: 1200px;
+    margin: 40px auto 0;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .legend-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 18px 22px;
+    border-radius: 4px;
+  }
+  .legend-card .title {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .legend-card .body {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  /* ===== GRID ===== */
+  main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 60px 24px 40px;
+  }
+
+  .section-title {
+    text-align: center;
+    margin: 40px 0 32px;
+    position: relative;
+  }
+  .section-title::before,
+  .section-title::after {
+    content: "";
+    display: inline-block;
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    vertical-align: middle;
+    margin: 0 20px;
+  }
+  .section-title span {
+    font-size: 18px;
+    letter-spacing: 0.3em;
+    color: var(--ink);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px;
+  }
+
+  /* ===== CARD ===== */
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: transform .25s ease, box-shadow .25s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(40,30,15,.08);
+  }
+
+  .card.hero { border: 2px solid var(--hero); }
+  .card.secret { border: 2px solid var(--secret); background: linear-gradient(180deg, #fff 0%, #f5f0fa 100%); }
+
+  .badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--gold);
+    color: #fff;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.2em;
+    font-family: "Noto Sans JP", sans-serif;
+    z-index: 2;
+  }
+  .badge.hero { background: var(--hero); }
+  .badge.secret { background: var(--secret); }
+
+  .card-no {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--gold);
+    line-height: 1;
+    z-index: 2;
+  }
+
+  .photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f8f3ea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-body {
+    padding: 22px 22px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .name-jp {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+
+  .pantone-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.15em;
+    font-family: "Noto Sans JP", sans-serif;
+  }
+  .pantone-chip {
+    width: 42px;
+    height: 60px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #fff;
+    flex-shrink: 0;
+  }
+  .pantone-chip.none {
+    background: repeating-linear-gradient(45deg, #fff, #fff 4px, #f0e8d8 4px, #f0e8d8 8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: var(--ink-soft);
+  }
+
+  .luck {
+    background: var(--accent-soft);
+    color: var(--gold);
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 2px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    font-family: "Noto Sans JP", sans-serif;
+    margin-bottom: 10px;
+    align-self: flex-start;
+  }
+  .card.hero .luck { background: #fde2e2; color: var(--hero); }
+  .card.secret .luck { background: #ece4f5; color: var(--secret); }
+
+  .copy {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.7;
+    margin-bottom: 18px;
+    min-height: 3em;
+  }
+
+  .form-row {
+    border-top: 1px dashed var(--line);
+    padding-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    font-family: "Noto Sans JP", sans-serif;
+  }
+  .form-cell {
+    text-align: center;
+    font-size: 10px;
+    color: var(--ink-soft);
+    letter-spacing: 0.1em;
+  }
+  .form-cell .label {
+    display: block;
+    font-size: 9px;
+    color: var(--gold);
+    margin-bottom: 4px;
+    letter-spacing: 0.15em;
+  }
+  .form-cell .val {
+    color: var(--ink);
+    font-weight: 500;
+    font-size: 11px;
+  }
+  .form-cell.diff .val {
+    color: var(--hero);
+    font-weight: 700;
+  }
+
+  /* ===== NOTES ===== */
+  .notes {
+    max-width: 1000px;
+    margin: 60px auto 0;
+    padding: 40px 32px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .notes h2 {
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    color: var(--gold);
+  }
+  .notes ol {
+    padding-left: 24px;
+  }
+  .notes li {
+    margin-bottom: 14px;
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--ink);
+  }
+  .notes li strong { color: var(--hero); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.25em;
+    border-top: 1px solid var(--line);
+    margin-top: 60px;
+  }
+  footer .org {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold);
+    margin-top: 6px;
+    letter-spacing: 0.3em;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: #fff; }
+    header { padding: 30px 20px; }
+    .card:hover { transform: none; box-shadow: none; }
+    .card { break-inside: avoid; box-shadow: none; }
+    .grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .legend { display: none; }
+  }
+
+  .omikuji-cta {
+    display: flex; align-items: center; gap: 18px;
+    max-width: 720px; margin: 40px auto 0;
+    padding: 22px 26px;
+    background: linear-gradient(135deg, #FFF8E1 0%, #F5EFE0 50%, #E8DAB0 100%);
+    border: 1px solid var(--gold-soft);
+    border-radius: 4px;
+    text-decoration: none; color: var(--ink);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative; overflow: hidden;
+  }
+  .omikuji-cta::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 80% 30%, rgba(255,255,255,0.4), transparent 60%);
+    pointer-events: none;
+  }
+  .omikuji-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(184,150,92,0.25);
+  }
+  .omikuji-cta .cta-icon {
+    font-size: 32px; flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(184,150,92,0.3));
+  }
+  .omikuji-cta .cta-label {
+    flex: 1; display: flex; flex-direction: column; gap: 4px;
+  }
+  .omikuji-cta .cta-eyebrow {
+    font-family: "Cormorant Garamond", serif; font-style: italic;
+    font-size: 11px; letter-spacing: 0.25em; color: var(--gold);
+    text-transform: uppercase;
+  }
+  .omikuji-cta .cta-main {
+    font-size: 17px; font-weight: 500; letter-spacing: 0.05em;
+    color: var(--ink);
+  }
+  .omikuji-cta .cta-arrow {
+    font-family: "Cormorant Garamond", serif; font-size: 24px;
+    color: var(--gold); flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  .omikuji-cta:hover .cta-arrow { transform: translateX(6px); }
+  @media (max-width: 480px) {
+    .omikuji-cta { padding: 18px 18px; gap: 14px; }
+    .omikuji-cta .cta-main { font-size: 14px; }
+    .omikuji-cta .cta-icon { font-size: 26px; }
+  }
+
+  /* ===== 3D FORMS ===== */
+  .forms3d-intro {
+    max-width: 900px;
+    margin: 0 auto 32px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.9;
+  }
+  .forms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .form-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 22px 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .form-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 34px rgba(40,30,15,.08);
+  }
+  .form-card .form-name {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .form-card .form-tag {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+  .form-parts {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-family: "Noto Sans JP", sans-serif;
+  }
+  .form-part {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    padding: 4px 12px;
+    color: var(--ink-soft);
+  }
+  .form-part b { color: var(--ink); font-weight: 700; }
+  .form-part.special {
+    background: #fde8e8;
+    border-color: #f3c9c9;
+    color: var(--hero);
+  }
+  .form-part.special b { color: var(--hero); }
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-top: 1px dashed var(--line);
+    padding-top: 14px;
+    margin-top: auto;
+  }
+  .form-btn {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding: 8px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid var(--accent);
+    color: var(--gold);
+    background: #fff;
+    transition: background .2s ease, color .2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .form-btn:hover { background: var(--accent-soft); }
+  .form-btn.primary {
+    background: var(--gold);
+    color: #fff;
+    border-color: var(--gold);
+  }
+  .form-btn.primary:hover { background: var(--accent); }
+
+  /* ===== 3D VIEWER MODAL ===== */
+  .viewer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 24, 16, 0.72);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 24px;
+  }
+  .viewer-overlay.open { display: flex; }
+  .viewer-box {
+    background: #1c1a17;
+    border-radius: 10px;
+    width: min(880px, 100%);
+    height: min(640px, 90vh);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.5);
+  }
+  .viewer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    color: #f5ede2;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .viewer-head .v-title { display: flex; align-items: center; gap: 10px; }
+  .viewer-close {
+    background: none; border: none; color: #cbb892;
+    font-size: 24px; cursor: pointer; line-height: 1;
+    padding: 0 4px;
+  }
+  .viewer-close:hover { color: #fff; }
+  .viewer-canvas-wrap {
+    flex: 1;
+    position: relative;
+    background: radial-gradient(circle at 50% 40%, #33302a 0%, #1c1a17 70%);
+  }
+  .viewer-canvas-wrap canvas { display: block; width: 100%; height: 100%; }
+  .viewer-status {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cbb892;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    padding: 20px;
+  }
+  .viewer-foot {
+    padding: 10px 20px;
+    color: #8f8578;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    font-family: "Noto Sans JP", sans-serif;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+  .viewer-foot a { color: #cbb892; text-decoration: none; }
+  .viewer-foot a:hover { color: #fff; text-decoration: underline; }
+  @media print {
+    #forms3d, .viewer-overlay { display: none !important; }
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="eyebrow">Lyric × MASTAR DESIGN</div>
+  <h1>ドリームダック 初回ラインナップ</h1>
+  <div class="sub">DREAM DUCK ／ SEASON 1 ― THE ORIGINAL PALETTE ―</div>
+  <div class="meta-row">
+    <span><strong>13</strong>カラー</span>
+    <span><strong>12</strong>レギュラー＋<strong>1</strong>シークレット</span>
+    <span>フォルム<strong>8</strong>通りから選抜</span>
+    <span>2026.06.25 確定</span>
+  </div>
+
+  <div class="legend">
+    <div class="legend-card">
+      <div class="title">運気テーマ</div>
+      <div class="body">全13色に「運の名前」と「1行コピー」を付与。おみくじ／おまもり的世界観の設計。</div>
+    </div>
+    <div class="legend-card">
+      <div class="title">フォルムパターン</div>
+      <div class="body">口ばし2種（開き／閉じ）× 羽2種（前／横）× 首2種（普通／傾き）＝最大8フォルムからカラーごとに選抜。基本形は「閉じ・横・普通」。</div>
+    </div>
+    <div class="legend-card">
+      <div class="title">核 / シークレット</div>
+      <div class="body">⑨ビビッドイエロー（チャンス運）が「核」、⑬オーロライエロー（ミラクル運）が「シークレット」。</div>
+    </div>
+  </div>
+
+  <a href="omikuji/" class="omikuji-cta">
+    <span class="cta-icon">🔮</span>
+    <span class="cta-label">
+      <span class="cta-eyebrow">Dream Duck Omikuji ／ 体験プロト公開中</span>
+      <span class="cta-main">今日のあなたのDuck占いを引く</span>
+    </span>
+    <span class="cta-arrow">→</span>
+  </a>
+</header>
+
+<main>
+  <div class="section-title"><span>レギュラー 12 カラー</span></div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-no">01</div>
+      <div class="photo"><img src="images/duck_01.png" alt="パールホワイト"></div>
+      <div class="card-body">
+        <div class="name-jp">パールホワイト</div>
+        <div class="pantone-line">
+          <div class="pantone-chip none">no chip</div>
+          <span>乳白パール ／ 指定なし</span>
+        </div>
+        <div class="luck">リセット運</div>
+        <div class="copy">そのままでいい日。</div>
+        <div class="form-row">
+          <div class="form-cell"><span class="label">口ばし</span><span class="val">閉じ</span></div>
+          <div class="form-cell"><span class="label">羽</span><span class="val">横</span></div>
+          <div class="form-cell"><span class="label">首</span><span class="val">普通</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-no">02</div>
+      <div class="photo"><img src="images/duck_02.png" alt="ベビーブルー"></div>
+      <div class="card-body">
+        <div class="name-jp">ベビーブルー</div>
+        <div class="pantone-line">
+          <div class="pantone-chip" style="background-image:url('images/pantone_05.png')"></div>
+          <span>PANTONE 635C</span>
+        </div>
+        <div class="luck">整え運</div>
+        <div class="copy">静かに整う日。</div>
+        <div class="form-row">
+          <div class="form-cell"><span class="label">口ばし</span><span class="val">閉じ</span></div>
+          <div class="form-cell"><span class="label">羽</span><span class="val">横</span></div>
+          <div class="form-cell"><span class="label">首</span><span class="val">普通</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-no">03</div>
+      <div class="photo"><img src="images/duck_03.png" alt="ミントグリーン"></div>
+      <div class="card-body">
+        <div class="name-jp">ミントグリーン</div>
+        <div class="pantone-line">
+          <div class="pantone-chip" style="background-image:url('images/pantone_06.png')"></div>
+          <span>PANTONE 344C</span>
+        </div>
+        <div class="luck">リフレッシュ運</div>
+        <div class="copy">深呼吸で流れが変わる。</div>
+        <div class="form-row">
+          <div class="form-cell diff"><span class="label">口ばし</span><span class="val">開き</span></div>
+          <div class="form-cell"><span class="label">羽</span><span class="val">横</span></div>
+          <div class="form-cell"><span class="label">首</span><span class="val">普通</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-no">04</div>
+      <div class="photo"><img src="images/duck_04.png" alt="ラベンダー"></div>
+      <div class="card-body">
+        <div class="name-jp">ラベンダー</div>
+        <div class="pantone-line">
+          <div class="pantone-chip" style="background-image:url('images/pantone_07.png')"></div>
+          <span>PANTONE 2635C</span>
+        </div>
+        <div class="luck">ゆるめ運</div>
+        <div class="copy">力を抜くとうまくいく。</div>
+        <div class="form-row">
+          <div class="form-cell diff"><span class="label">口ばし</span><span class="val">開き</span></div>
+          <div class="form-cell"><span class="label">羽</span><span class="val">横</span></div>
+          <div class="form-cell diff"><span class="label">首</span><span class="val">傾き</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-no">05</div>
+      <div class="photo"><img src="images/duck_05.png" alt="クリームイエロー"></div>
+      <div class="card-body">
+        <div class="name-jp">クリームイエロー</div>
+        <div class="pantone-line">
+          <div class="pantone-chip" style="background-image:url('images/pantone_02.png')"></div>
+          <span>PANTONE 0131C</span>
+        </div>
+        <div class="luck">やわらぎ運</div>
+        <div class="copy">少し気持ちが軽くなる日。</div>
+        <div class="form-row">
+          <div class="form-cell"><span class="label">口ばし</span><span class="val">閉じ</span></div>
+          <div class="form-cell"><span class="label">羽</span><span class="val">横</span></div>
+          <div class="form-cell diff"><span class="label">首</span><span class="val">傾き</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-no">06</div>
+      <div class="photo"><img src="images/duck_06.png" alt="ハートフェルトピンク"></div>
+      <div class="card-body">
+        <div class="name-jp">ハートフェルトピンク</div>
+        <div class="pantone-line">
+          <div class="pantone-chip" style="background-image:url('images/pantone_03.png')"></div>
+          <span>PANTONE 698C</span>
+        </div>
+        <div class="luck">愛され運</div>
+        <div class="copy">やさしさが伝わる日。</div>
+        <div class="form-row">
+          <div class="form-cell"><span class="label">口ばし</span><span class="val">閉じ</span></div>
+          <div class="form-cell diff"><span class="label">羽</span><span class="val">前</span></div>
+          <div class="form-cell"><span class="label">首</span><span class="val">普通</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-no">07</div>
+      <div class="photo"><img src="images/duck_07.png" alt="ムードグラデーションピンク"></div>
+      <div class="card-body">
+        <div class="name-jp">ムードグラデーションピンク</div>
+        <div class="pantone-line">
+          <div class="pantone-chip none">no chip</div>
+          <span>濃→薄ピンクのグラデ</span>
+        </div>
+        <div class="luck">流れ運</div>
+        <div class="copy">変化にまかせてOK。</div>
+        <div class="form-row">
+          <div class="form-cell"><span class="label">口ばし</span><span class="val">閉じ</span></div>
+          <div class="form-cell"><span class="label">羽</span><span class="val">横</span></div>
+          <div class="form-cell"><span class="label">首</span><span class="val">普通</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-no">08</div>
+      <div class="photo"><img src="images/duck_08.png" alt="アンバー"></div>
+      <div class="card-body">
+        <div class="name-jp">アンバー</div>
+        <div class="pantone-line">
+          <div class="pantone-chip" style="background-image:url('images/pantone_10.png')"></div>
+          <span>PANTONE 130C</span>
+        </div>
+        <div class="luck">あたため運</div>
+        <div class="copy">じんわり満たされる日。</div>
+        <div class="form-row">
+          <div class="form-cell diff"><span class="label">口ばし</span><span class="val">開き</span></div>
+          <div class="form-cell diff"><span class="label">羽</span><span class="val">前</span></div>
+          <div class="form-cell"><span class="label">首</span><span class="val">普通</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card hero">
+      <span class="badge hero">CORE</span><div class="card-no">09</div>
+      <div class="photo"><img src="images/duck_09.png" alt="ビビッドイエロー"></div>
+      <div class="card-body">
+        <div class="name-jp">ビビッドイエロー <span style="color:var(--hero);font-size:11px;">（核）</span></div>
+        <div class="pantone-line">
+          <div class="pantone-chip" style="background-image:url('images/pantone_08.png')"></div>
+          <span>PANTONE 012C</span>
+        </div>
+        <div class="luck">チャンス運</div>
+        <div class="copy">動けば運がひらく。</div>
+        <div class="form-row">
+          <div class="form-cell"><span class="label">口ばし</span><span class="val">閉じ</span></div>
+          <div class="form-cell"><span class="label">羽</span><span class="val">横</span></div>
+          <div class="form-cell"><span class="label">首</span><span class="val">普通</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-no">10</div>
+      <div class="photo"><img src="images/duck_10.png" alt="ブライトブルー"></div>
+      <div class="card-body">
+        <div class="name-jp">ブライトブルー</div>
+        <div class="pantone-line">
+          <div class="pantone-chip" style="background-image:url('images/pantone_12.png')"></div>
+          <span>PANTONE 2935C</span>
+        </div>
+        <div class="luck">スタート運</div>
+        <div class="copy">思いきって動く日。</div>
+        <div class="form-row">
+          <div class="form-cell diff"><span class="label">口ばし</span><span class="val">開き</span></div>
+          <div class="form-cell"><span class="label">羽</span><span class="val">横</span></div>
+          <div class="form-cell"><span class="label">首</span><span class="val">普通</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-no">11</div>
+      <div class="photo"><img src="images/duck_11.png" alt="ピュアレッド"></div>
+      <div class="card-body">
+        <div class="name-jp">ピュアレッド</div>
+        <div class="pantone-line">
+          <div class="pantone-chip" style="background-image:url('images/pantone_09.png')"></div>
+          <span>PANTONE 185C</span>
+        </div>
+        <div class="luck">勝負運</div>
+        <div class="copy">迷わず進んでいい日。</div>
+        <div class="form-row">
+          <div class="form-cell"><span class="label">口ばし</span><span class="val">閉じ</span></div>
+          <div class="form-cell diff"><span class="label">羽</span><span class="val">前</span></div>
+          <div class="form-cell"><span class="label">首</span><span class="val">普通</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-no">12</div>
+      <div class="photo"><img src="images/duck_12.png" alt="ダスティブラック"></div>
+      <div class="card-body">
+        <div class="name-jp">ダスティブラック</div>
+        <div class="pantone-line">
+          <div class="pantone-chip" style="background-image:url('images/pantone_11.png')"></div>
+          <span>PANTONE 547C</span>
+        </div>
+        <div class="luck">守り運</div>
+        <div class="copy">無理しないが正解。</div>
+        <div class="form-row">
+          <div class="form-cell"><span class="label">口ばし</span><span class="val">閉じ</span></div>
+          <div class="form-cell"><span class="label">羽</span><span class="val">横</span></div>
+          <div class="form-cell"><span class="label">首</span><span class="val">普通</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title" style="margin-top:80px;"><span>シークレット</span></div>
+
+  <div class="grid" style="grid-template-columns: minmax(280px, 380px); justify-content: center;">
+    <div class="card secret">
+      <span class="badge secret">SECRET</span><div class="card-no" style="color:var(--secret);">13</div>
+      <div class="photo"><img src="images/duck_13.png" alt="オーロライエロー"></div>
+      <div class="card-body">
+        <div class="name-jp">オーロライエロー</div>
+        <div class="pantone-line">
+          <div class="pantone-chip none">no chip</div>
+          <span>黄パール調 ／ 要Pantone確認</span>
+        </div>
+        <div class="luck">ミラクル運</div>
+        <div class="copy">夢みたいなことが起こるかも。</div>
+        <div class="form-row">
+          <div class="form-cell"><span class="label">口ばし</span><span class="val">閉じ</span></div>
+          <div class="form-cell"><span class="label">羽</span><span class="val">横</span></div>
+          <div class="form-cell"><span class="label">首</span><span class="val">普通</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3D FORMS -->
+  <div class="section-title" id="forms3d" style="margin-top:80px;"><span>3D フォルムデータ</span></div>
+
+  <p class="forms3d-intro">
+    せきや氏作成の3D原型（Nomad Sculpt）から書き出したフォルム別データ。<br>
+    各フォルムを <b>その場で回して確認</b>でき、<b>OBJ（頂点カラー付き）／ STL（造形・3Dプリント用）</b> をダウンロードできます。<br>
+    <span style="font-size:12px;">※ 現状は基本形まわりの5フォルム。首傾き系・開き×前などの組み合わせは追加予定。</span>
+  </p>
+
+  <div class="forms-grid" id="formsGrid"></div>
+
+  <!-- 3D VIEWER MODAL -->
+  <div class="viewer-overlay" id="viewerOverlay">
+    <div class="viewer-box">
+      <div class="viewer-head">
+        <span class="v-title"><span>🦆</span><span id="viewerTitle">3D プレビュー</span></span>
+        <button class="viewer-close" id="viewerClose" aria-label="閉じる">×</button>
+      </div>
+      <div class="viewer-canvas-wrap" id="viewerCanvasWrap">
+        <div class="viewer-status" id="viewerStatus">読み込み中…</div>
+      </div>
+      <div class="viewer-foot">
+        <span>ドラッグで回転 ／ ホイールでズーム ／ 右ドラッグで移動</span>
+        <span id="viewerDl"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="notes">
+    <h2>気づき／確認事項</h2>
+    <ol>
+      <li><strong>⑬オーロライエローのPantoneが未確定</strong>。実物レンダーは黄パール調で、旧版では⑨ビビッドイエロー（012C）と重複表記になっていた。「012C＋パール加工」なのか専用Pantone指定なのか、要・リリック確認。</li>
+      <li><strong>フォルムは3パーツ・各2バリエーション（最大8通り）に確定</strong>。実際に使う特殊フォルムは「口ばし開き(③④⑧⑩)・羽前(⑥⑧⑪)・首傾き(④⑤)」のみで、残りは基本形（閉じ・横・普通）。新規金型は実質この差分パーツだけで済み、コスト面はクリーン。</li>
+      <li><strong>⑥ハートフェルトピンク と ⑦ムードグラデーションピンクの識別性</strong>。店頭で隣接すると見分けにくい懸念。グラデ感が実物で出るか、せきや氏の3Dで要確認。</li>
+      <li><strong>運気おみくじ世界観</strong>は自社プロダクト「AI占いお守り」と高い親和性。QR連動「今日のドリームダック診断」へ展開余地あり。</li>
+      <li><strong>運気テーマ13種</strong>は誕生月／季節キャンペーンへ転用可能。販促カレンダー設計のフックになる。</li>
+    </ol>
+  </div>
+</main>
+
+<footer>
+  DREAM DUCK ／ SEASON 1 THE ORIGINAL PALETTE ／ 2026.06.25 確定
+  <div class="org">Lyric Inc. × MASTAR DESIGN</div>
+</footer>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+
+// ---- フォルム定義（basename＝拡張子なしのファイル名） ----
+const FORMS = [
+  { base: '口閉じ、羽前、顔通常',       beak: '閉じ', wing: '前', neck: '普通', extra: '',     tag: 'Form 01' },
+  { base: '口閉じ、羽前、顔通常、EYE',  beak: '閉じ', wing: '前', neck: '普通', extra: 'EYE',  tag: 'Form 02' },
+  { base: '口閉じ、羽横、顔普通、wink', beak: '閉じ', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 03 ／ 基本形' },
+  { base: '口開き、羽横、顔普通',       beak: '開き', wing: '横', neck: '普通', extra: '',     tag: 'Form 04' },
+  { base: '口開き、羽横、顔普通、wink', beak: '開き', wing: '横', neck: '普通', extra: 'wink', tag: 'Form 05' },
+];
+// 基本形（閉じ・横・普通）以外を「特殊パーツ」としてハイライト
+const isSpecial = (kind, val) =>
+  (kind === 'beak' && val === '開き') ||
+  (kind === 'wing' && val === '前') ||
+  (kind === 'neck' && val === '傾き');
+
+const enc = (s) => encodeURIComponent(s);
+
+// ---- カード生成 ----
+const grid = document.getElementById('formsGrid');
+FORMS.forEach((f, i) => {
+  const objHref = enc(f.base + '.obj');
+  const stlHref = enc(f.base + '.stl');
+  const parts = [
+    { kind: 'beak', label: '口ばし', val: f.beak },
+    { kind: 'wing', label: '羽',     val: f.wing },
+    { kind: 'neck', label: '首',     val: f.neck },
+  ];
+  const partsHtml = parts.map(p =>
+    `<span class="form-part${isSpecial(p.kind, p.val) ? ' special' : ''}">${p.label}：<b>${p.val}</b></span>`
+  ).join('') + (f.extra ? `<span class="form-part">${f.extra}</span>` : '');
+
+  const el = document.createElement('div');
+  el.className = 'form-card';
+  el.innerHTML = `
+    <div class="form-name">${f.beak}・${f.wing}・${f.neck}${f.extra ? '（' + f.extra + '）' : ''}
+      <span class="form-tag">${f.tag}</span></div>
+    <div class="form-parts">${partsHtml}</div>
+    <div class="form-actions">
+      <button class="form-btn primary" data-idx="${i}">▶ 3Dプレビュー</button>
+      <a class="form-btn" href="${objHref}" download="${f.base}.obj">OBJ ↓</a>
+      <a class="form-btn" href="${stlHref}" download="${f.base}.stl">STL ↓</a>
+    </div>`;
+  grid.appendChild(el);
+});
+
+// ---- ビューア ----
+const overlay   = document.getElementById('viewerOverlay');
+const wrap       = document.getElementById('viewerCanvasWrap');
+const statusEl   = document.getElementById('viewerStatus');
+const titleEl    = document.getElementById('viewerTitle');
+const dlEl       = document.getElementById('viewerDl');
+const closeBtn   = document.getElementById('viewerClose');
+
+let renderer, scene, camera, controls, currentMesh, rafId;
+
+function initThree() {
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  wrap.appendChild(renderer.domElement);
+
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(45, 1, 0.1, 5000);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x4b463c, 1.0));
+  const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(1, 1.4, 1); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffe9c2, 0.6); fill.position.set(-1, 0.5, -1); scene.add(fill);
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+
+  const animate = () => {
+    rafId = requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  };
+  animate();
+  window.addEventListener('resize', onResize);
+}
+
+function onResize() {
+  if (!renderer) return;
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+
+function fitCamera(geometry) {
+  geometry.computeBoundingBox();
+  const box = geometry.boundingBox;
+  const center = new THREE.Vector3();
+  box.getCenter(center);
+  const size = new THREE.Vector3();
+  box.getSize(size);
+  const maxDim = Math.max(size.x, size.y, size.z);
+  const dist = maxDim / (2 * Math.tan((camera.fov * Math.PI / 180) / 2)) * 1.6;
+  controls.target.copy(center);
+  camera.position.set(center.x, center.y + size.y * 0.15, center.z + dist);
+  camera.near = maxDim / 100;
+  camera.far  = maxDim * 20;
+  camera.updateProjectionMatrix();
+  controls.update();
+}
+
+function clearMesh() {
+  if (currentMesh) {
+    scene.remove(currentMesh);
+    currentMesh.geometry.dispose();
+    currentMesh.material.dispose();
+    currentMesh = null;
+  }
+}
+
+function openViewer(idx) {
+  const f = FORMS[idx];
+  if (!renderer) initThree();
+  overlay.classList.add('open');
+  titleEl.textContent = `${f.beak}・${f.wing}・${f.neck}${f.extra ? '（' + f.extra + '）' : ''}`;
+  dlEl.innerHTML =
+    `<a href="${enc(f.base + '.obj')}" download="${f.base}.obj">OBJ ↓</a>　` +
+    `<a href="${enc(f.base + '.stl')}" download="${f.base}.stl">STL ↓</a>`;
+  statusEl.style.display = 'flex';
+  statusEl.textContent = '読み込み中…（初回は数MB。少しお待ちください）';
+  clearMesh();
+  onResize();
+
+  const loader = new STLLoader();
+  loader.load(
+    enc(f.base + '.stl'),
+    (geometry) => {
+      const material = new THREE.MeshStandardMaterial({
+        color: 0xf2c94c, roughness: 0.55, metalness: 0.05, flatShading: false,
+      });
+      geometry.computeVertexNormals();
+      currentMesh = new THREE.Mesh(geometry, material);
+      scene.add(currentMesh);
+      fitCamera(geometry);
+      statusEl.style.display = 'none';
+    },
+    undefined,
+    (err) => {
+      console.error(err);
+      statusEl.style.display = 'flex';
+      statusEl.innerHTML = 'STLを読み込めませんでした。<br>「プレビュー起動.command」からローカルサーバー経由で開いてください。';
+    }
+  );
+}
+
+function closeViewer() {
+  overlay.classList.remove('open');
+  clearMesh();
+}
+
+grid.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-idx]');
+  if (btn) openViewer(Number(btn.dataset.idx));
+});
+closeBtn.addEventListener('click', closeViewer);
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closeViewer(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeViewer(); });
+</script>
+
+</body>
+</html>
